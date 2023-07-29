@@ -72,6 +72,100 @@ var product_1 = require("./entity/product");
             }
         });
     }); });
+    app.get('/api/products/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var product, e_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, productRepository.findOne({
+                            where: {
+                                id: req.params.id
+                            },
+                        })];
+                case 1:
+                    product = _a.sent();
+                    if (product) {
+                        return [2 /*return*/, res.send(product)];
+                    }
+                    else {
+                        return [2 /*return*/, res.status(404).send('Product not found')];
+                    }
+                    return [3 /*break*/, 3];
+                case 2:
+                    e_1 = _a.sent();
+                    return [2 /*return*/, res.status(500).send('Internal Server Error')];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    app.put('/api/products/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var product, result, e_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 5, , 6]);
+                    return [4 /*yield*/, productRepository.findOne({
+                            where: {
+                                id: req.params.id
+                            },
+                        })];
+                case 1:
+                    product = _a.sent();
+                    if (!product) return [3 /*break*/, 3];
+                    productRepository.merge(product, req.body);
+                    return [4 /*yield*/, productRepository.save(product)];
+                case 2:
+                    result = _a.sent();
+                    return [2 /*return*/, res.status(200).send(result)];
+                case 3: return [2 /*return*/, res.status(400).send('Product not found to update')];
+                case 4: return [3 /*break*/, 6];
+                case 5:
+                    e_2 = _a.sent();
+                    return [2 /*return*/, res.status(500).send('Internal Server Error')];
+                case 6: return [2 /*return*/];
+            }
+        });
+    }); });
+    app.delete('/api/products/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, productRepository.delete(req.params.id)];
+                case 1:
+                    result = _a.sent();
+                    return [2 /*return*/, res.status(200).send(result)];
+            }
+        });
+    }); });
+    app.post('/api/products/:id/like', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var product, result, e_3;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 5, , 6]);
+                    return [4 /*yield*/, productRepository.findOne({
+                            where: {
+                                id: req.params.id
+                            },
+                        })];
+                case 1:
+                    product = _a.sent();
+                    if (!product) return [3 /*break*/, 3];
+                    product.likes++;
+                    return [4 /*yield*/, productRepository.save(product)];
+                case 2:
+                    result = _a.sent();
+                    return [2 /*return*/, res.status(200).send('Like!')];
+                case 3: return [2 /*return*/, res.status(400).send('Product not found')];
+                case 4: return [3 /*break*/, 6];
+                case 5:
+                    e_3 = _a.sent();
+                    return [2 /*return*/, res.status(500).send('Internal Server Error')];
+                case 6: return [2 /*return*/];
+            }
+        });
+    }); });
     console.log('Listening to port: 8000');
     app.listen(8000);
 });
